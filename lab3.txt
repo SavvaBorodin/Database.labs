@@ -1,0 +1,38 @@
+╭─ ~ ───────────────────────────────────────────╮
+╰─❯ psql -h localhost -p 5432 -U postgres -d postgres
+psql (17.6 (Homebrew))
+Type "help" for help.
+
+postgres=#
+
+
+CREATE DATABASE test_db;
+CREATE DATABASE universsity_db;
+
+
+DROP DATABASE test_db;
+DROP DATABASE universsity_db;
+
+
+CREATE DATABASE test_db;
+
+
+\c test_db
+You are now connected to database "test_db" as user "postgres".
+
+
+CREATE DATABASE universsity_db;
+
+
+\c university_db
+You are now connected to database "universsity_db" as user "postgres".
+
+
+
+
+\c postgres
+You are now connected to database "postgres" as user "postgres".
+
+
+DROP DATABASE universsity_db;
+DROP DATABASE test_db;
