@@ -1,0 +1,147 @@
+psql -h localhost -p 5432 -U postgres -d postgres
+
+CREATE TABLE students (
+    student_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE student_phones (
+    student_id INT NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    phone_type VARCHAR(20),
+    PRIMARY KEY (student_id, phone_number),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+DROP TABLE IF EXISTS student_phones;
+
+CREATE TABLE courses (
+    course_id SERIAL PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    credits INT
+);
+
+CREATE TABLE enrollments (
+    student_id INT NOT NULL,
+    course_id INT NOT NULL,
+    grade CHAR(2),
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+DROP TABLE IF EXISTS courses, students, enrollments CASCADE;
+
+CREATE TABLE departments (
+    department_id SERIAL PRIMARY KEY,
+    department_name VARCHAR(100) NOT NULL,
+    department_head VARCHAR(100)
+);
+
+CREATE TABLE students (
+    student_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+DROP TABLE IF EXISTS students, departments CASCADE;
+
+CREATE TABLE student_phones (
+    student_id INT NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    phone_type VARCHAR(20),
+    PRIMARY KEY (student_id, phone_number),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+DROP TABLE IF EXISTS students, student_phones CASCADE;
+
+CREATE TABLE authors (
+    author_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    birth_date DATE
+);
+
+CREATE TABLE books (
+    book_id SERIAL PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    isbn VARCHAR(13) UNIQUE NOT NULL,
+    publication_year INTEGER,
+    available_copies INTEGER DEFAULT 1
+);
+
+CREATE TABLE book_authors (
+    book_id INTEGER NOT NULL,
+    author_id INTEGER NOT NULL,
+    PRIMARY KEY (book_id, author_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id),
+    FOREIGN KEY (author_id) REFERENCES authors(author_id)
+);
+
+CREATE TABLE members (
+    member_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15),
+    membership_date DATE DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE loans (
+    loan_id SERIAL PRIMARY KEY,
+    member_id INTEGER NOT NULL,
+    book_id INTEGER NOT NULL,
+    loan_date DATE DEFAULT CURRENT_DATE,
+    due_date DATE NOT NULL,
+    return_date DATE,
+    late_fee DECIMAL(10,2) DEFAULT 0.00,
+    FOREIGN KEY (member_id) REFERENCES members(member_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+INSERT INTO departments (department_name, department_head) VALUES
+('Computer Science', 'Dr. William Ross'),
+('Business Administration', 'Dr. Emily Sanders');
+
+INSERT INTO students (full_name, department_id) VALUES
+('Lucas Green', 1),
+('Ava Johnson', 1),
+('Mason Carter', 2);
+
+INSERT INTO student_phones (student_id, phone_number, phone_type) VALUES
+(1, '+996700112233', 'Mobile'),
+(2, '+996555778899', 'Home'),
+(3, '+996701223344', 'Work');
+
+INSERT INTO courses (course_name, credits) VALUES
+('Database Systems', 6),
+('Business Management', 5),
+('Software Engineering', 7);
+
+INSERT INTO enrollments (student_id, course_id, grade) VALUES
+(1, 1, 'A'),
+(2, 3, 'B'),
+(3, 2, 'A');
+
+INSERT INTO authors (first_name, last_name, birth_date) VALUES
+('George', 'Lenon', '1948-09-20'),
+('Maria', 'Albertovna', '1797-08-30'),
+('Ibragim', 'Asimov', '1920-01-02');
+
+INSERT INTO books (title, isbn, publication_year, available_copies) VALUES
+('A Game of Codes', '9781234567890', 2021, 3),
+('Modern Databases', '9780987654321', 2020, 2),
+('AI Foundations', '9781111111111', 2023, 4);
+
+INSERT INTO book_authors (book_id, author_id) VALUES
+(1, 1),
+(2, 3),
+(3, 3);
+
+INSERT INTO members (first_name, last_name, email, phone) VALUES
+('Noah', 'Parker', 'noah.parker@library.org', '+996700000001'),
+('Liam', 'Reed', 'liam.reed@library.org', '+996700000002'),
+('Emma', 'Cole', 'emma.cole@library.org', '+996700000003');
+
+INSERT INTO loans (member_id, book_id, due_date, late_fee) VALUES
+(1, 1, '2025-10-25', 0.00),
+(2, 2, '2025-10-28', 0.00),
+(3, 3, '2025-10-30', 0.00);
+
