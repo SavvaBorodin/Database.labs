@@ -1,0 +1,18 @@
+BEGIN;
+
+INSERT INTO students (student_id, name, age, email, faculty)
+VALUES (11116, 'Farkhat Orozbekov', 20, 'fo@auca.kg', 'SFW');
+
+INSERT INTO enrollments (student_id, course_id, grade)
+VALUES 
+(11116, 1, 'A'),
+(11116, 4, 'B+');
+
+UPDATE enrollments
+SET grade = 'A-'
+WHERE student_id = 11112 AND course_id = 5;
+
+DELETE FROM enrollments
+WHERE student_id = 11113 AND course_id = 3;
+
+COMMIT;
