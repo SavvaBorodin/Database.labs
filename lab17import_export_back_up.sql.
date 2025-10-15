@@ -1,0 +1,13 @@
+COPY students TO '/path/to/export/students.csv' DELIMITER ',' CSV HEADER;
+COPY courses TO '/path/to/export/courses.csv' DELIMITER ',' CSV HEADER;
+COPY enrollments TO '/path/to/export/enrollments.csv' DELIMITER ',' CSV HEADER;
+
+COPY students(student_id, name, age, email, faculty)
+FROM '/path/to/import/students.csv' DELIMITER ',' CSV HEADER;
+COPY courses(course_id, course_name, faculty)
+FROM '/path/to/import/courses.csv' DELIMITER ',' CSV HEADER;
+COPY enrollments(enrollment_id, student_id, course_id, grade)
+FROM '/path/to/import/enrollments.csv' DELIMITER ',' CSV HEADER;
+
+\! pg_dump -h localhost -p 5432 -U postgres -d postgres -F c -f '/path/to/backup/postgres_backup.dump'
+\! pg_restore -h localhost -p 5432 -U postgres -d postgres -c '/path/to/backup/postgres_backup.dump'
