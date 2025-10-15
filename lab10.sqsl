@@ -1,0 +1,92 @@
+psql -h localhost -p 5432 -U postgres -d postgres
+
+CREATE TABLE employees (
+    employee_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    department VARCHAR(100),
+    salary NUMERIC(12,2),
+    age INT,
+    hire_date DATE,
+    experience_years INT,
+    bonus NUMERIC(10,2)
+);
+
+INSERT INTO employees (first_name, last_name, email, department, salary, age, hire_date, experience_years, bonus)
+VALUES
+('Aizada', 'Batrudimova', 'ab@postuniversity.kg', 'Software Engineering', 70000, 28, '2023-05-15', 4, 3000),
+('Bakyt', 'Tursunov', 'bt@postuniversity.kg', 'Software Engineering', 80000, 35, '2022-03-10', 8, NULL),
+('Cholpon', 'Orozbekova', 'co@postuniversity.kg', 'Human Resources', 50000, 42, '2024-07-01', 12, 1500),
+('Dastan', 'Sadykov', 'ds@postuniversity.kg', 'Finance', 60000, 31, '2021-09-05', 7, NULL),
+('Elmira', 'Toktomuratova', 'et@postuniversity.kg', 'Finance', 65000, 27, '2025-01-12', 5, 2000);
+
+CREATE TABLE employee_skills (
+    id SERIAL PRIMARY KEY,
+    employee_id INT REFERENCES employees(employee_id) ON DELETE CASCADE,
+    skill_name VARCHAR(100) NOT NULL
+);
+
+INSERT INTO employee_skills (employee_id, skill_name)
+VALUES
+(1, 'C++'),
+(1, 'Python'),
+(2, 'Python'),
+(3, 'Recruitment'),
+(4, 'Negotiation'),
+(5, 'Postgres');
+
+CREATE TABLE sales_data (
+    sale_id SERIAL PRIMARY KEY,
+    department VARCHAR(100),
+    sales_amount NUMERIC(12,2)
+);
+
+INSERT INTO sales_data (department, sales_amount)
+VALUES
+('Software Engineering', 100000),
+('Finance', 250000),
+('Human Resources', 50000);
+
+CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(150),
+    category VARCHAR(100),
+    price NUMERIC(12,2)
+);
+
+INSERT INTO products (product_name, category, price)
+VALUES
+('Laptop', 'Electronics', 1200),
+('Mouse', 'Accessories', 30),
+('Chair', 'Furniture', 200),
+('Monitor', 'Electronics', 350);
+
+CREATE TABLE sales (
+    sale_id SERIAL PRIMARY KEY,
+    product_id INT REFERENCES products(product_id) ON DELETE SET NULL,
+    sale_date DATE NOT NULL,
+    amount NUMERIC(12,2) NOT NULL
+);
+
+INSERT INTO sales (product_id, sale_date, amount)
+VALUES
+(1, '2025-01-10', 1200),
+(1, '2025-04-15', 1200),
+(4, '2025-06-20', 350),
+(2, '2025-03-12', 30),
+(3, '2025-07-01', 200);
+
+CREATE TABLE product_reviews (
+    review_id SERIAL PRIMARY KEY,
+    product_id INT REFERENCES products(product_id) ON DELETE CASCADE,
+    rating NUMERIC(2,1) CHECK (rating >= 0 AND rating <= 5),
+    review_text TEXT
+);
+
+INSERT INTO product_reviews (product_id, rating, review_text)
+VALUES
+(1, 4.5, 'Excellent performance'),
+(1, 4.7, 'Worth the price'),
+(2, 3.8, 'Average in quality'),
+(4, 4.9, 'Stunning colors');
