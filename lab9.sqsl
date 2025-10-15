@@ -1,0 +1,142 @@
+psql -h localhost -p 5432 -U postgres -d postgres
+
+CREATE TABLE students_bad (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    phone_numbers TEXT
+);
+
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+CREATE TABLE student_phones (
+    student_id INT,
+    phone_number VARCHAR(15),
+    phone_type VARCHAR(20),
+    PRIMARY KEY (student_id, phone_number),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+INSERT INTO students (student_id, name) VALUES
+(48232, 'Aizada Batrudimova');
+
+INSERT INTO student_phones (student_id, phone_number, phone_type) VALUES
+(48232, '888-322-585-333', 'mobile'),
+(48232, '362-574-161-545', 'home');
+
+SELECT * FROM student_phones;
+DROP TABLE IF EXISTS courses;
+DROP TABLE IF EXISTS enrollments;
+
+CREATE TABLE enrollments_bad (
+    student_id INT,
+    course_id INT,
+    course_name VARCHAR(100),
+    PRIMARY KEY (student_id, course_id)
+);
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(100),
+    credits INT
+);
+
+CREATE TABLE enrollments (
+    student_id INT,
+    course_id INT,
+    grade CHAR(2),
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS students;
+
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(100),
+    department_head VARCHAR(100)
+);
+
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+
+INSERT INTO departments (department_id, department_name, department_head) VALUES
+(1, 'Engineering', 'Aibek Usubaliev');
+
+INSERT INTO students (student_id, name, department_id) VALUES
+(84321, 'Bakyt Tursunov', 1);
+
+SELECT * FROM students;
+SELECT * FROM departments;
+
+CREATE TABLE authors (
+    author_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    birth_date DATE
+);
+
+CREATE TABLE books (
+    book_id SERIAL PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    isbn VARCHAR(13) UNIQUE,
+    publication_year INTEGER,
+    available_copies INTEGER DEFAULT 1
+);
+CREATE TABLE book_authors (
+    book_id INTEGER,
+    author_id INTEGER,
+    PRIMARY KEY (book_id, author_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id),
+    FOREIGN KEY (author_id) REFERENCES authors(author_id)
+);
+
+CREATE TABLE members (
+    member_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15),
+    membership_date DATE DEFAULT CURRENT_DATE
+);
+CREATE TABLE loans (
+    loan_id SERIAL PRIMARY KEY,
+    member_id INTEGER NOT NULL,
+    book_id INTEGER NOT NULL,
+    loan_date DATE DEFAULT CURRENT_DATE,
+    due_date DATE NOT NULL,
+    return_date DATE,
+    late_fee DECIMAL(10,2) DEFAULT 0.00,
+    FOREIGN KEY (member_id) REFERENCES members(member_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+INSERT INTO authors (first_name, last_name, birth_date) VALUES
+('Erkin', 'Bekmamatov', '1975-04-11'),
+('Aigul', 'Toktomatova', '1982-07-23'),
+('Nurlan', 'Akhmetov', '1968-02-09');
+
+INSERT INTO books (title, isbn, publication_year, available_copies) VALUES
+('Secrets of SQL', '9781234567890', 2020, 3),
+('Database Design Basics', '9780987654321', 2022, 2),
+('PostgreSQL in Depth', '9781122334455', 2021, 4);
+
+INSERT INTO book_authors (book_id, author_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+INSERT INTO members (first_name, last_name, email, phone) VALUES
+('Tilek', 'Asanov', 'ta@university.edu', '555-1234'),
+('Ainura', 'Omuralieva', 'ao@university.edu', '555-5678'),
+('Azamat', 'Kasymov', 'ak@university.edu', '555-9999');
+
+INSERT INTO loans (member_id, book_id, due_date) VALUES
+(1, 1, '2025-10-25'),
+(2, 2, '2025-10-30'),
+(3, 3, '2025-11-01');
+
+SELECT * FROM loans;
