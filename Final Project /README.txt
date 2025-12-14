@@ -26,9 +26,10 @@ It contains export indicators for each region from **2011 to 2024**.
 
 This table serves as the **data source** for all other tables.
 
----
 
-### 2. Regional Tables
+
+
+2. Regional Tables
 
 There are **seven regional tables**, each representing a specific region:
 
@@ -53,9 +54,10 @@ Each table has:
 
 This establishes a **one-to-one relationship** between each regional table and the central table.
 
----
 
-### 3. `final_summary`
+
+
+3. `final_summary`
 
 The `final_summary` table represents the **statistical result** of the project.
 
@@ -74,9 +76,10 @@ It stores **aggregated indicators** derived from all regions:
 
 This table is linked to the central table via a **foreign key**, allowing identification of the region that achieved each maximum value.
 
----
 
-## Table Relationships
+
+
+-------------------------Table Relationships
 
 * `export_goods` is the **parent table**
 * All regional tables reference `export_goods` via `region_id`
@@ -84,26 +87,26 @@ This table is linked to the central table via a **foreign key**, allowing identi
 
 These relationships are enforced using **FOREIGN KEY constraints** and are visible in the ER diagram within pgAdmin 4.
 
----
 
-## Purpose of the Project
+
+
+-------------------------Purpose of the Project
 
 * Store export data in a structured relational form
 * Calculate regional indicators (year-based and average values)
 * Provide a clear **statistical summary** of the best-performing regions
 * Demonstrate correct database normalization and table relationships
 
----
 
-## Technologies Used
+
+------------------------Technologies Used
 
 * PostgreSQL
 * SQL
 * pgAdmin 4
 
----
 
-## Result
+------------Result
 
 The project successfully demonstrates:
 
